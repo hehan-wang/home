@@ -509,3 +509,91 @@ body::before {
   0% { background-position: 20% 30%, 80% 70%, 50% 50%; }
   100% { background-position: 30% 40%, 70% 60%, 60% 60%; }
 } 
+
+/* 1. 标题呼吸发光动画 */
+.glow-title {
+  animation: glow-breath 2.2s ease-in-out infinite alternate;
+}
+@keyframes glow-breath {
+  0% {
+    text-shadow: 0 0 16px #0ff, 0 2px 8px #222, 0 0 0 #00eaff;
+  }
+  100% {
+    text-shadow: 0 0 32px #00eaff, 0 2px 16px #222, 0 0 24px #00eaff;
+  }
+}
+
+/* 2. 按钮流光动画 */
+.glow-btn {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+.glow-btn::before {
+  content: '';
+  position: absolute;
+  left: -60%;
+  top: 0;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(120deg, rgba(0,255,255,0.0) 0%, rgba(0,255,255,0.25) 50%, rgba(0,255,255,0.0) 100%);
+  transform: skewX(-20deg);
+  animation: btn-shine 2.5s linear infinite;
+  z-index: 2;
+  pointer-events: none;
+}
+@keyframes btn-shine {
+  0% { left: -60%; }
+  100% { left: 120%; }
+}
+
+/* 3. 卡片边缘流光动画 */
+.shine-card {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+.shine-card::after {
+  content: '';
+  position: absolute;
+  top: -60%;
+  left: -60%;
+  width: 120%;
+  height: 120%;
+  background: linear-gradient(120deg, rgba(0,255,255,0.0) 60%, rgba(0,255,255,0.13) 80%, rgba(0,255,255,0.0) 100%);
+  filter: blur(2px);
+  pointer-events: none;
+  animation: card-shine 3.5s linear infinite;
+  z-index: 2;
+}
+@keyframes card-shine {
+  0% { top: -60%; left: -60%; }
+  100% { top: 60%; left: 60%; }
+}
+
+/* 4. 渐显动画 */
+.animate-fadein {
+  opacity: 0;
+  transform: translateY(32px);
+  animation: fadein-up 1.2s cubic-bezier(.4,2,.6,1) forwards;
+}
+@keyframes fadein-up {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* 5. 粒子canvas层级调整 */
+#bg-particles {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+  display: block;
+}
+
+main, footer, header, .feature-card, .benefit-card, .footer-section, .contact-method, .pricing-info, .announcement-content {
+  position: relative;
+  z-index: 1;
+} 
