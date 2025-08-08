@@ -11,7 +11,137 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Smooth scroll for navigation links
+    // Typewriter Effect
+    function initTypewriter() {
+        // Only target typewriter elements within hero section
+        const heroSection = document.querySelector('.hero');
+        if (!heroSection) return;
+        
+        const typewriterElement = heroSection.querySelector('.typewriter-text');
+        const cursorElement = heroSection.querySelector('.typewriter-cursor');
+        const descriptionElement = heroSection.querySelector('.typewriter-description');
+        
+        if (!typewriterElement) return;
+        
+        // Get texts from data attribute
+        const texts = JSON.parse(typewriterElement.getAttribute('data-texts') || '[]');
+        const descriptionText = descriptionElement?.getAttribute('data-text') || '';
+        
+        let currentTextIndex = 0;
+        let currentCharIndex = 0;
+        let isDeleting = false;
+        let isPaused = false;
+        let hasStartedDescription = false;
+        let typewriterCompleted = false; // Flag to prevent restart
+        
+        function updateCursorPosition() {
+            if (!cursorElement || !typewriterElement) return;
+            
+            // Create a temporary span to measure text width
+            const tempSpan = document.createElement('span');
+            tempSpan.style.visibility = 'hidden';
+            tempSpan.style.position = 'absolute';
+            tempSpan.style.fontSize = window.getComputedStyle(typewriterElement).fontSize;
+            tempSpan.style.fontFamily = window.getComputedStyle(typewriterElement).fontFamily;
+            tempSpan.style.fontWeight = window.getComputedStyle(typewriterElement).fontWeight;
+            tempSpan.textContent = typewriterElement.textContent;
+            
+            document.body.appendChild(tempSpan);
+            const textWidth = tempSpan.offsetWidth;
+            document.body.removeChild(tempSpan);
+            
+            // Position cursor right after the text, considering centered layout
+            // For centered text, cursor should be at 50% + (textWidth/2) + cursor offset
+            const containerWidth = typewriterElement.parentElement.offsetWidth;
+            const cursorOffset = (textWidth / 2) + 2; // Half text width + small gap
+            cursorElement.style.left = `calc(50% + ${cursorOffset}px)`;
+        }
+        
+        function typeText() {
+            if (typewriterCompleted) return; // Prevent restarting
+            
+            const currentText = texts[currentTextIndex];
+            
+            if (!isDeleting) {
+                // Typing forward
+                typewriterElement.textContent = currentText.substring(0, currentCharIndex + 1);
+                currentCharIndex++;
+                updateCursorPosition();
+                
+                if (currentCharIndex === currentText.length) {
+                    // Finished typing current text
+                    isPaused = true;
+                    
+                    // Start description typing after first text
+                    if (currentTextIndex === 0 && !hasStartedDescription && descriptionElement) {
+                        hasStartedDescription = true;
+                        setTimeout(() => {
+                            typeDescription();
+                        }, 800);
+                    }
+                    
+                    setTimeout(() => {
+                        isDeleting = true;
+                        isPaused = false;
+                        typeText();
+                    }, currentTextIndex === 0 ? 3000 : 2000); // Longer pause for first text
+                    return;
+                }
+            } else {
+                // Deleting backward
+                typewriterElement.textContent = currentText.substring(0, currentCharIndex);
+                currentCharIndex--;
+                updateCursorPosition();
+                
+                if (currentCharIndex < 0) {
+                    // Finished deleting
+                    isDeleting = false;
+                    currentTextIndex = (currentTextIndex + 1) % texts.length;
+                    currentCharIndex = 0;
+                    
+                    setTimeout(() => {
+                        typeText();
+                    }, 300);
+                    return;
+                }
+            }
+            
+            if (!isPaused && !typewriterCompleted) {
+                const speed = isDeleting ? 50 : (Math.random() * 100 + 80);
+                setTimeout(typeText, speed);
+            }
+        }
+        
+        function typeDescription() {
+            if (!descriptionElement || !descriptionText || typewriterCompleted) return;
+            
+            descriptionElement.classList.add('typing');
+            let charIndex = 0;
+            
+            function typeDescChar() {
+                if (charIndex < descriptionText.length && !typewriterCompleted) {
+                    descriptionElement.textContent = descriptionText.substring(0, charIndex + 1);
+                    charIndex++;
+                    setTimeout(typeDescChar, 30);
+                }
+            }
+            
+            typeDescChar();
+        }
+        
+        // Ensure typewriter only runs once
+        if (!typewriterElement.hasAttribute('data-typewriter-started')) {
+            typewriterElement.setAttribute('data-typewriter-started', 'true');
+            
+            // Initial cursor position
+            updateCursorPosition();
+            
+            // Start typewriter effect after a short delay
+            setTimeout(() => {
+                typeText();
+            }, 1000);
+        }
+    }
     function initSmoothScroll() {
         const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
         navLinks.forEach(link => {
@@ -362,9 +492,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Initialize hero animations
+    // Initialize hero animations (modified to work with typewriter)
     function initHeroAnimations() {
-        const heroElements = document.querySelectorAll('.hero-badge, .hero-title, .hero-description, .hero-actions, .hero-stats');
+        // Only animate non-typewriter hero elements
+        const heroElements = document.querySelectorAll('.hero-badge, .hero-actions, .hero-stats, .hero-features, .brand-strip');
         
         heroElements.forEach((el, index) => {
             el.style.opacity = '0';
@@ -374,8 +505,47 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
                 el.style.opacity = '1';
                 el.style.transform = 'translateY(0)';
-            }, index * 200 + 300);
+            }, index * 200 + 800); // Delay to let title appear first
         });
+
+        // Animate title main separately
+        const titleMain = document.querySelector('.title-main');
+        if (titleMain) {
+            titleMain.style.opacity = '0';
+            titleMain.style.transform = 'translateY(30px)';
+            titleMain.style.transition = 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
+            
+            setTimeout(() => {
+                titleMain.style.opacity = '1';
+                titleMain.style.transform = 'translateY(0)';
+            }, 300);
+        }
+
+        // Animate typewriter container separately
+        const typewriterContainer = document.querySelector('.typewriter-container');
+        if (typewriterContainer) {
+            typewriterContainer.style.opacity = '0';
+            typewriterContainer.style.transform = 'translateY(20px)';
+            typewriterContainer.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+            
+            setTimeout(() => {
+                typewriterContainer.style.opacity = '1';
+                typewriterContainer.style.transform = 'translateY(0)';
+            }, 600);
+        }
+
+        // Animate description container
+        const descriptionContainer = document.querySelector('.hero-description');
+        if (descriptionContainer) {
+            descriptionContainer.style.opacity = '0';
+            descriptionContainer.style.transform = 'translateY(20px)';
+            descriptionContainer.style.transition = 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
+            
+            setTimeout(() => {
+                descriptionContainer.style.opacity = '1';
+                descriptionContainer.style.transform = 'translateY(0)';
+            }, 1200);
+        }
     }
 
     // Button ripple effect
@@ -517,6 +687,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize all features
     function init() {
         addAnimationStyles();
+        initTypewriter();
         initEmbeddedDetection();
         initSmoothScroll();
         initScrollAnimations();

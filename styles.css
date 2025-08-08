@@ -311,6 +311,10 @@ body {
 
 .hero-title {
   margin-bottom: 24px;
+  text-align: center; /* 确保标题容器居中 */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 子元素居中对齐 */
 }
 
 .title-main {
@@ -322,27 +326,113 @@ body {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   margin-bottom: 8px;
+  text-align: center; /* 主标题文本居中 */
 }
 
 .title-sub {
-  display: block;
+  display: flex;
+  justify-content: center; /* 副标题内容居中 */
+  align-items: center;
   font-size: 1.5rem;
   font-weight: 400;
   color: #64748b;
+}
+
+/* Typewriter Effect Styles */
+.typewriter-container {
+  display: inline-block;
+  width: 280px; /* 固定宽度防止抖动 */
+  min-height: 1.8em;
+  line-height: 1.2;
+  text-align: center; /* 打字机容器内容居中 */
+  vertical-align: top;
+  position: relative;
+}
+
+.typewriter-text {
+  display: inline-block;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  vertical-align: top;
+  position: absolute;
+  top: 0;
+  left: 50%; /* 居中定位起点 */
+  transform: translateX(-50%); /* 实现居中 */
+  width: calc(100% - 12px); /* 为光标留出空间 */
+}
+
+.typewriter-cursor {
+  display: inline-block;
+  color: #4e83fd;
+  animation: blink 1s infinite;
+  font-weight: 400;
+  position: absolute;
+  top: 0;
+  left: 50%; /* 初始居中位置，会通过JS调整 */
+  width: 2px;
+  height: 1.2em;
+  transform: translateX(-50%); /* 光标本身居中 */
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.typewriter-description {
+  display: inline-block;
+  opacity: 0;
+  line-height: 1.6;
+  width: 100%;
+}
+
+.typewriter-description.typing {
+  opacity: 1;
+}
+
+/* Smooth transitions for typewriter */
+.typewriter-text,
+.typewriter-description {
+  transition: opacity 0.3s ease;
 }
 
 .hero-description {
   font-size: 1.25rem;
   color: #64748b;
   line-height: 1.8;
-  margin-bottom: 40px;
+  margin-bottom: 24px;
+}
+
+/* Hero feature bullets to enrich above-the-fold content */
+.hero-features {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 16px;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 36px 0;
+}
+
+.hero-features li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #334155;
+  font-size: 14px;
+}
+
+.hero-features li::before {
+  content: '✓';
+  color: #10b981;
+  font-weight: 700;
 }
 
 .hero-actions {
   display: flex;
   justify-content: center;
   gap: 16px;
-  margin-bottom: 60px;
+  margin-bottom: 36px;
 }
 
 .btn {
@@ -394,7 +484,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 40px;
+  gap: 32px;
 }
 
 .stat-item {
@@ -421,13 +511,36 @@ body {
 
 .stat-divider {
   width: 1px;
-  height: 40px;
+  height: 28px;
   background: #e2e8f0;
 }
 
+/* Brand compatibility strip under stats */
+.brand-strip {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 28px;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.brand-label {
+  padding: 4px 10px;
+  background: rgba(102, 126, 234, 0.08);
+  border: 1px solid rgba(102, 126, 234, 0.15);
+  color: #667eea;
+  border-radius: 9999px;
+  font-weight: 600;
+}
+
+.brand-item { color: #475569; }
+.brand-dot { color: #cbd5e1; }
+
 /* Section Styling */
 section {
-  padding: 120px 0;
+  padding: 96px 0;
 }
 
 .section-header {
@@ -1900,10 +2013,29 @@ section {
   .title-sub {
     font-size: 1.25rem;
   }
-  
-  .hero-description {
-    font-size: 1rem;
+
+  /* Mobile typewriter adjustments */
+  .typewriter-container {
+    width: 240px; /* 移动端调整宽度 */
+    min-height: 1.5em;
+    line-height: 1.2;
+    text-align: center; /* 移动端也保持居中 */
   }
+  
+  .typewriter-text {
+    width: calc(100% - 8px); /* 移动端调整文本宽度 */
+    left: 50%; /* 移动端也居中 */
+    transform: translateX(-50%);
+  }
+  
+  .typewriter-cursor {
+    width: 1px;
+    height: 1.2em;
+    left: 50%; /* 移动端光标也从中心开始 */
+    transform: translateX(-50%);
+  }
+  
+  .hero-description { font-size: 1rem; }
   
   .hero-actions {
     flex-direction: column;
@@ -1923,9 +2055,7 @@ section {
     font-size: 2rem;
   }
   
-  section {
-    padding: 80px 0;
-  }
+  section { padding: 72px 0; }
   
   .models-grid,
   .benefits-grid {
@@ -2092,10 +2222,7 @@ section {
     font-size: 2rem;
   }
   
-  .hero-description {
-    font-size: 1rem;
-    margin-bottom: 32px;
-  }
+  .hero-description { font-size: 1rem; margin-bottom: 20px; }
   
   .hero-description br {
     display: none;
@@ -2108,6 +2235,9 @@ section {
     font-size: 16px;
     padding: 14px 24px;
   }
+
+  .hero-features { grid-template-columns: 1fr; margin-bottom: 24px; }
+  .brand-strip { flex-wrap: wrap; gap: 6px 10px; margin-top: 20px; }
   
   .model-category,
   .benefit-card,
