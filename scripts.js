@@ -90,6 +90,13 @@ document.addEventListener('DOMContentLoaded', function() {
             .contact-card:nth-child(1) { transition-delay: 0.1s; }
             .contact-card:nth-child(2) { transition-delay: 0.2s; }
             .contact-card:nth-child(3) { transition-delay: 0.3s; }
+            
+            .doc-card:nth-child(1) { transition-delay: 0.1s; }
+            .doc-card:nth-child(2) { transition-delay: 0.2s; }
+            .doc-card:nth-child(3) { transition-delay: 0.3s; }
+            .doc-card:nth-child(4) { transition-delay: 0.4s; }
+            .doc-card:nth-child(5) { transition-delay: 0.5s; }
+            .doc-card:nth-child(6) { transition-delay: 0.6s; }
         `;
         document.head.appendChild(style);
     }
@@ -272,8 +279,82 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// Copy code function
+function copyCode() {
+    const code = `curl -X POST https://api.wenwen-ai.com/v1/chat/completions \\
+  -H "Authorization: Bearer YOUR_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{"model": "gpt-3.5-turbo", "messages": [{"role": "user", "content": "Hello!"}]}'`;
+    
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(code).then(() => {
+            showCopySuccess();
+        }).catch(() => {
+            fallbackCopy(code);
+        });
+    } else {
+        fallbackCopy(code);
+    }
+}
+
+function fallbackCopy(text) {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-999999px';
+    textArea.style.top = '-999999px';
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    
+    try {
+        const successful = document.execCommand('copy');
+        if (successful) {
+            showCopySuccess();
+        } else {
+            showCopyError();
+        }
+    } catch (err) {
+        console.error('复制失败:', err);
+        showCopyError();
+    }
+    
+    document.body.removeChild(textArea);
+}
+
+function showCopySuccess() {
+    const button = document.querySelector('.copy-button');
+    const originalContent = button.innerHTML;
+    
+    button.innerHTML = '<i class="fas fa-check"></i>';
+    button.style.background = 'rgba(16, 185, 129, 0.3)';
+    button.title = '复制成功！';
+    
+    setTimeout(() => {
+        button.innerHTML = originalContent;
+        button.style.background = 'rgba(255, 255, 255, 0.1)';
+        button.title = '复制代码';
+    }, 2000);
+}
+
+function showCopyError() {
+    const button = document.querySelector('.copy-button');
+    const originalContent = button.innerHTML;
+    
+    button.innerHTML = '<i class="fas fa-exclamation"></i>';
+    button.style.background = 'rgba(239, 68, 68, 0.3)';
+    button.title = '复制失败，请手动复制';
+    
+    setTimeout(() => {
+        button.innerHTML = originalContent;
+        button.style.background = 'rgba(255, 255, 255, 0.1)';
+        button.title = '复制代码';
+    }, 2000);
+}
+
 // Export for external use if needed
 window.WenwenAPI = {
     version: '2.0.0',
-    initialized: true
+    initialized: true,
+    copyCode: copyCode
 };

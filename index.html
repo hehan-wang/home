@@ -206,17 +206,22 @@
         <section class="documentation">
             <div class="container">
                 <div class="section-header">
-                    <h2 class="section-title">开发文档</h2>
-                    <p class="section-subtitle">快速上手，轻松集成</p>
+                    <h2 class="section-title">开发资源</h2>
+                    <p class="section-subtitle">从入门到精通，全方位开发支持</p>
                 </div>
                 <div class="doc-grid">
-                    <a href="https://edo504m8t9.feishu.cn/wiki/K2EUwDfX6iu3COkmGSXcJL02nhc" class="doc-card" target="_blank">
+                    <a href="https://yunhefuture.feishu.cn/wiki/Q8wGwgKLZiyFgSk3amicX2innZd" class="doc-card" target="_blank">
                         <div class="doc-icon">
-                            <i class="fas fa-book-open"></i>
+                            <i class="fas fa-rocket"></i>
                         </div>
                         <div class="doc-content">
-                            <h3 class="doc-title">使用教程</h3>
-                            <p class="doc-desc">详细的接入指南和示例代码</p>
+                            <h3 class="doc-title">快速开始</h3>
+                            <p class="doc-desc">详细接入指南，5分钟完成集成</p>
+                            <div class="doc-tags">
+                                <span class="doc-tag">Python</span>
+                                <span class="doc-tag">Node.js</span>
+                                <span class="doc-tag">cURL</span>
+                            </div>
                         </div>
                         <div class="doc-arrow">
                             <i class="fas fa-arrow-right"></i>
@@ -224,16 +229,86 @@
                     </a>
                     <a href="https://status.wenwen-ai.com/status/api" class="doc-card" target="_blank">
                         <div class="doc-icon">
-                            <i class="fas fa-chart-line"></i>
+                            <i class="fas fa-heartbeat"></i>
                         </div>
                         <div class="doc-content">
                             <h3 class="doc-title">服务监控</h3>
-                            <p class="doc-desc">实时查看API服务状态</p>
+                            <p class="doc-desc">实时API状态和性能指标</p>
+                            <div class="doc-stats">
+                                <span class="status-badge online">● 服务正常</span>
+                                <span class="response-time">平均响应: 15ms</span>
+                            </div>
+                        </div>
+                        <div class="doc-arrow">
+                            <i class="fas fa-external-link-alt"></i>
+                        </div>
+                    </a>
+                    <div class="doc-card code-sample">
+                        <div class="doc-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <div class="doc-content">
+                            <h3 class="doc-title">代码示例</h3>
+                            <p class="doc-desc">一键复制，立即使用</p>
+                            <div class="code-preview">
+                                <code>curl -X POST https://api.wenwen-ai.com/v1/chat/completions \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"model": "gpt-3.5-turbo", "messages": [{"role": "user", "content": "Hello!"}]}'</code>
+                            </div>
+                        </div>
+                        <div class="copy-button" onclick="copyCode()">
+                            <i class="fas fa-copy"></i>
+                        </div>
+                    </div>
+                    <a href="https://key.wenwen-ai.com/pricing" class="doc-card" target="_blank">
+                        <div class="doc-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="doc-content">
+                            <h3 class="doc-title">API文档</h3>
+                            <p class="doc-desc">完整的接口文档和参数说明</p>
+                            <div class="doc-features">
+                                <span class="feature-item">📝 详细参数说明</span>
+                                <span class="feature-item">🔍 错误码查询</span>
+                                <span class="feature-item">🎯 最佳实践</span>
+                            </div>
                         </div>
                         <div class="doc-arrow">
                             <i class="fas fa-arrow-right"></i>
                         </div>
                     </a>
+                    <a href="https://key.wenwen-ai.com" class="doc-card" target="_blank">
+                        <div class="doc-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="doc-content">
+                            <h3 class="doc-title">开发者控制台</h3>
+                            <p class="doc-desc">管理API密钥和查看使用统计</p>
+                            <div class="community-stats">
+                                <span class="stat">📊 使用量统计</span>
+                                <span class="stat">🔑 API密钥管理</span>
+                            </div>
+                        </div>
+                        <div class="doc-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </a>
+                    <div class="doc-card info-only">
+                        <div class="doc-icon">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <div class="doc-content">
+                            <h3 class="doc-title">开发工具</h3>
+                            <p class="doc-desc">SDK和调试工具即将发布</p>
+                            <div class="tools-list">
+                                <span class="tool-item">🐍 Python SDK (开发中)</span>
+                                <span class="tool-item">⚡ JavaScript SDK (规划中)</span>
+                                <span class="tool-item">🔧 Postman集合 (可用)</span>
+                            </div>
+                        </div>
+                        <div class="coming-soon-badge">即将推出</div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -241,39 +316,148 @@
             <div class="container">
                 <div class="section-header">
                     <h2 class="section-title">价格方案</h2>
-                    <p class="section-subtitle">透明定价，按需付费</p>
+                    <p class="section-subtitle">透明定价，按需付费，高性价比选择</p>
                 </div>
-                <div class="pricing-card">
-                    <div class="pricing-header">
-                        <div class="pricing-icon">
-                            <i class="fas fa-bolt"></i>
+                <div class="pricing-grid">
+                    <div class="pricing-card featured">
+                        <div class="pricing-badge">推荐</div>
+                        <div class="pricing-header">
+                            <div class="pricing-icon">
+                                <i class="fas fa-rocket"></i>
+                            </div>
+                            <h3 class="pricing-title">按量计费</h3>
+                            <p class="pricing-desc">按实际使用量付费，灵活便捷</p>
+                            <div class="pricing-price">
+                                <span class="price-symbol">¥</span>
+                                <span class="price-amount">0.012</span>
+                                <span class="price-unit">/1K tokens</span>
+                            </div>
                         </div>
-                        <h3 class="pricing-title">按量计费</h3>
-                        <p class="pricing-desc">兼容OpenAI协议，无缝对接现有应用</p>
+                        <div class="pricing-features">
+                            <div class="feature-item">
+                                <i class="fas fa-check"></i>
+                                <span>100+ AI模型支持</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-check"></i>
+                                <span>官方价格7折优惠</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-check"></i>
+                                <span>无最低消费限制</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-check"></i>
+                                <span>API调用统计分析</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-check"></i>
+                                <span>7x24小时技术支持</span>
+                            </div>
+                        </div>
+                        <div class="pricing-action">
+                            <a href="https://key.wenwen-ai.com/register" class="btn btn-primary" target="_blank">
+                                <span class="btn-text">立即开始</span>
+                                <span class="btn-icon">→</span>
+                            </a>
+                        </div>
                     </div>
-                    <div class="pricing-features">
-                        <div class="feature-item">
-                            <i class="fas fa-check"></i>
-                            <span>100+ AI模型支持</span>
+                    <div class="pricing-card">
+                        <div class="pricing-header">
+                            <div class="pricing-icon">
+                                <i class="fas fa-gift"></i>
+                            </div>
+                            <h3 class="pricing-title">新用户福利</h3>
+                            <p class="pricing-desc">免费体验额度，零门槛试用</p>
+                            <div class="pricing-price">
+                                <span class="price-symbol">¥</span>
+                                <span class="price-amount">10</span>
+                                <span class="price-unit">免费额度</span>
+                            </div>
                         </div>
-                        <div class="feature-item">
-                            <i class="fas fa-check"></i>
-                            <span>官方价格7折优惠</span>
+                        <div class="pricing-features">
+                            <div class="feature-item">
+                                <i class="fas fa-check"></i>
+                                <span>注册即送10元额度</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-check"></i>
+                                <span>支持所有主流模型</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-check"></i>
+                                <span>完整功能体验</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-check"></i>
+                                <span>无时间限制</span>
+                            </div>
                         </div>
-                        <div class="feature-item">
-                            <i class="fas fa-check"></i>
-                            <span>无最低消费限制</span>
-                        </div>
-                        <div class="feature-item">
-                            <i class="fas fa-check"></i>
-                            <span>7x24小时技术支持</span>
+                        <div class="pricing-action">
+                            <a href="https://key.wenwen-ai.com/register" class="btn btn-secondary" target="_blank">
+                                <span class="btn-text">免费试用</span>
+                                <span class="btn-icon">→</span>
+                            </a>
                         </div>
                     </div>
-                    <div class="pricing-action">
-                        <a href="https://key.wenwen-ai.com/pricing" class="btn btn-primary" target="_blank">
-                            <span class="btn-text">查看详细价格</span>
-                            <span class="btn-icon">→</span>
-                        </a>
+                    <div class="pricing-card">
+                        <div class="pricing-header">
+                            <div class="pricing-icon">
+                                <i class="fas fa-crown"></i>
+                            </div>
+                            <h3 class="pricing-title">企业定制</h3>
+                            <p class="pricing-desc">专属服务，量身定制解决方案</p>
+                            <div class="pricing-price">
+                                <span class="price-contact">联系商务</span>
+                            </div>
+                        </div>
+                        <div class="pricing-features">
+                            <div class="feature-item">
+                                <i class="fas fa-check"></i>
+                                <span>专属API密钥</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-check"></i>
+                                <span>SLA服务保障</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-check"></i>
+                                <span>私有化部署选项</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-check"></i>
+                                <span>专属客户经理</span>
+                            </div>
+                        </div>
+                        <div class="pricing-action">
+                            <a href="#contact" class="btn btn-secondary">
+                                <span class="btn-text">联系我们</span>
+                                <span class="btn-icon">→</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="pricing-info">
+                    <div class="info-card">
+                        <i class="fas fa-shield-alt"></i>
+                        <div class="info-content">
+                            <h4>安全可靠</h4>
+                            <p>数据加密传输，符合企业安全标准</p>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-chart-line"></i>
+                        <div class="info-content">
+                            <h4>透明计费</h4>
+                            <p>实时消费统计，每笔调用清晰可查</p>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-handshake"></i>
+                        <div class="info-content">
+                            <h4>无隐藏费用</h4>
+                            <p>明码标价，无额外收费项目</p>
+                        </div>
                     </div>
                 </div>
             </div>
