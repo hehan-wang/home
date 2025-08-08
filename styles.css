@@ -58,10 +58,61 @@ body {
 
 /* Enhanced positioning for embedded contexts */
 .floating-nav.embedded {
-  position: sticky;
-  top: 24px;
-  z-index: 99999;
+  position: sticky !important;
+  top: 24px !important;
+  z-index: 999999 !important;
   margin-bottom: 20px;
+  transform: translateX(-50%);
+  left: 50%;
+  /* Enhanced visual prominence for embedded context */
+  background: rgba(255, 255, 255, 0.98) !important;
+  backdrop-filter: blur(20px) saturate(1.2) !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.5) !important;
+  border: 2px solid rgba(102, 126, 234, 0.2) !important;
+  border-radius: 16px !important;
+  /* Animation for smooth position changes */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Fallback positioning for deeply embedded contexts */
+.floating-nav.embedded.deep-embed {
+  position: relative !important;
+  top: 0 !important;
+  margin: 20px auto 30px auto !important;
+  transform: none !important;
+  left: auto !important;
+  /* Even more prominent styling */
+  border: 3px solid rgba(102, 126, 234, 0.4) !important;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3), 0 0 0 2px rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Enhanced mobile embedded styles */
+@media (max-width: 768px) {
+  .floating-nav.embedded {
+    top: 12px !important;
+    width: calc(100% - 24px) !important;
+    min-width: auto !important;
+    max-width: none !important;
+  }
+  
+  .floating-nav.embedded.deep-embed {
+    margin: 12px auto 20px auto !important;
+    width: calc(100% - 20px) !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .floating-nav.embedded {
+    top: 8px !important;
+    width: calc(100% - 16px) !important;
+    padding: 8px 12px !important;
+  }
+  
+  .floating-nav.embedded.deep-embed {
+    margin: 8px auto 16px auto !important;
+    width: calc(100% - 12px) !important;
+    padding: 8px 10px !important;
+  }
 }
 
 /* Ensure navigation stays above all other elements */
