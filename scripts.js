@@ -31,16 +31,44 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Navigation background effect on scroll
-    function handleNavScroll() {
+    // Check if embedded and adjust navigation
+    function initEmbeddedDetection() {
+        const isEmbedded = window !== window.top;
+        const isMobile = window.innerWidth <= 768;
         const nav = document.querySelector('.floating-nav');
-        if (window.scrollY > 50) {
+        
+        if (isEmbedded) {
+            // If embedded, move navigation further down and make it more prominent
+            nav.style.top = isMobile ? '8px' : '24px';
+            nav.style.zIndex = '99999';
             nav.style.background = 'rgba(255, 255, 255, 0.98)';
-            nav.style.boxShadow = '0 12px 40px rgba(0, 0, 0, 0.15)';
-        } else {
-            nav.style.background = 'rgba(255, 255, 255, 0.95)';
-            nav.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.1)';
+            nav.style.boxShadow = '0 12px 40px rgba(0, 0, 0, 0.2)';
+            nav.classList.add('embedded');
         }
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            const isMobileNow = window.innerWidth <= 768;
+            if (isEmbedded && isMobileNow !== isMobile) {
+                nav.style.top = isMobileNow ? '8px' : '24px';
+            }
+        });
+        
+        // Also check for scroll to adjust navigation
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const currentIsMobile = window.innerWidth <= 768;
+            
+            if (scrolled > 50) {
+                nav.style.top = isEmbedded ? (currentIsMobile ? '4px' : '12px') : (currentIsMobile ? '4px' : '8px');
+                nav.style.background = 'rgba(255, 255, 255, 0.98)';
+                nav.style.boxShadow = '0 12px 40px rgba(0, 0, 0, 0.2)';
+            } else {
+                nav.style.top = isEmbedded ? (currentIsMobile ? '8px' : '24px') : (currentIsMobile ? '8px' : '16px');
+                nav.style.background = 'rgba(255, 255, 255, 0.95)';
+                nav.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.1)';
+            }
+        });
     }
 
     // Intersection Observer for animations
@@ -60,7 +88,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }, observerOptions);
 
         // Observe all animatable elements
-        const animatableElements = document.querySelectorAll('.model-category, .benefit-card, .doc-card, .contact-card, .qr-card, .pricing-card');
+        const animatableElements = document.querySelectorAll('.model-category, .benefit-card, .doc-card, .contact-card, .qr-card, .pricing-card, .benefit-item, .tier-card, .step-item, .faq-item');
         animatableElements.forEach(el => {
             el.style.opacity = '0';
             el.style.transform = 'translateY(30px)';
@@ -97,13 +125,31 @@ document.addEventListener('DOMContentLoaded', function() {
             .doc-card:nth-child(4) { transition-delay: 0.4s; }
             .doc-card:nth-child(5) { transition-delay: 0.5s; }
             .doc-card:nth-child(6) { transition-delay: 0.6s; }
+            
+            .benefit-item:nth-child(1) { transition-delay: 0.1s; }
+            .benefit-item:nth-child(2) { transition-delay: 0.2s; }
+            .benefit-item:nth-child(3) { transition-delay: 0.3s; }
+            .benefit-item:nth-child(4) { transition-delay: 0.4s; }
+            
+            .tier-card:nth-child(1) { transition-delay: 0.1s; }
+            .tier-card:nth-child(2) { transition-delay: 0.2s; }
+            .tier-card:nth-child(3) { transition-delay: 0.3s; }
+            .tier-card:nth-child(4) { transition-delay: 0.4s; }
+            
+            .step-item:nth-child(odd) { transition-delay: 0.1s; }
+            .step-item:nth-child(even) { transition-delay: 0.2s; }
+            
+            .faq-item:nth-child(1) { transition-delay: 0.1s; }
+            .faq-item:nth-child(2) { transition-delay: 0.2s; }
+            .faq-item:nth-child(3) { transition-delay: 0.3s; }
+            .faq-item:nth-child(4) { transition-delay: 0.4s; }
         `;
         document.head.appendChild(style);
     }
 
     // Enhanced hover effects for cards
     function initCardEffects() {
-        const cards = document.querySelectorAll('.model-category, .benefit-card, .doc-card, .contact-card, .qr-card');
+        const cards = document.querySelectorAll('.model-category, .benefit-card, .doc-card, .contact-card, .qr-card, .benefit-item, .tier-card, .faq-item');
         
         cards.forEach(card => {
             card.addEventListener('mouseenter', function() {
@@ -228,41 +274,65 @@ document.addEventListener('DOMContentLoaded', function() {
         return 1 - Math.pow(1 - t, 3);
     }
 
-    // Parallax effect for hero shapes
-    function initParallax() {
-        const shapes = document.querySelectorAll('.shape');
-        
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const rate = scrolled * -0.5;
-            
-            shapes.forEach((shape, index) => {
-                const speed = (index + 1) * 0.3;
-                shape.style.transform = `translateY(${rate * speed}px) rotate(${scrolled * 0.1}deg)`;
+    // Initialize revenue chart animation
+    function initRevenueChart() {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const bars = entry.target.querySelectorAll('.bar');
+                    bars.forEach((bar, index) => {
+                        setTimeout(() => {
+                            bar.style.opacity = '1';
+                            bar.classList.add('animate-bar');
+                        }, index * 200);
+                    });
+                    observer.unobserve(entry.target);
+                }
             });
-        });
+        }, { threshold: 0.3 });
+        
+        const revenueChart = document.querySelector('.revenue-chart');
+        if (revenueChart) {
+            observer.observe(revenueChart);
+        }
+        
+        // Add styles for bar animation
+        const barStyle = document.createElement('style');
+        barStyle.textContent = `
+            .bar {
+                opacity: 0;
+                transform: scaleY(0);
+                transform-origin: bottom;
+                transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            
+            .bar.animate-bar {
+                opacity: 1;
+                transform: scaleY(1);
+            }
+        `;
+        document.head.appendChild(barStyle);
     }
 
     // Initialize all features
     function init() {
         addAnimationStyles();
+        initEmbeddedDetection();
         initSmoothScroll();
         initScrollAnimations();
         initCardEffects();
         initHeroAnimations();
         initButtonEffects();
         initStatsAnimation();
-        initParallax();
+        initRevenueChart();
         
         // Event listeners
         window.addEventListener('scroll', () => {
             updateScrollProgress();
-            handleNavScroll();
         });
         
         // Initial calls
         updateScrollProgress();
-        handleNavScroll();
     }
 
     // Start the application
