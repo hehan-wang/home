@@ -36,6 +36,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const isEmbedded = window !== window.top;
         const nav = document.querySelector('.floating-nav');
         
+        // 配置选项：是否在嵌入时隐藏导航栏
+        const HIDE_NAV_IN_EMBEDDED = true; // 设置为 true 可以完全隐藏嵌入时的导航栏
+        
         // Function to detect parent site navigation height and structure
         function detectParentNavigation() {
             if (!isEmbedded) return { height: 0, hasNav: false };
@@ -99,6 +102,15 @@ document.addEventListener('DOMContentLoaded', function() {
             };
             
             if (isEmbedded) {
+                // 如果配置为隐藏嵌入时的导航栏
+                if (HIDE_NAV_IN_EMBEDDED) {
+                    position = {
+                        type: 'none',
+                        display: 'none'
+                    };
+                    return position;
+                }
+                
                 // Enhanced embedded positioning logic
                 const isLikelyCovered = !checkNavigationVisibility();
                 const parentNavHeight = parentInfo.height;
@@ -122,12 +134,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     let topPosition;
                     if (scrolled > 50) {
                         topPosition = currentIsMobile ? 
-                            Math.max(8, parentNavHeight * 0.2) : 
-                            Math.max(16, parentNavHeight * 0.3);
+                            Math.max(20, parentNavHeight * 0.4) : 
+                            Math.max(40, parentNavHeight * 0.6);
                     } else {
                         topPosition = currentIsMobile ? 
-                            Math.max(12, parentNavHeight * 0.4) : 
-                            Math.max(24, parentNavHeight * 0.5);
+                            Math.max(30, parentNavHeight * 0.6) : 
+                            Math.max(60, parentNavHeight * 0.8);
                     }
                     
                     position = {
@@ -171,7 +183,14 @@ document.addEventListener('DOMContentLoaded', function() {
         function updateNavigationPosition() {
             const position = calculateOptimalPosition();
             
+            // 如果配置为隐藏导航栏
+            if (position.type === 'none') {
+                nav.style.display = 'none';
+                return;
+            }
+            
             // Apply position and styling
+            nav.style.display = 'flex'; // 确保显示
             nav.style.position = position.type;
             nav.style.top = position.top + (typeof position.top === 'number' ? 'px' : '');
             nav.style.zIndex = position.zIndex;
