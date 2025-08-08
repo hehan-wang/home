@@ -6,7 +6,7 @@
     <title>问问API - 多模型AI接口服务</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script
     type="text/javascript"
     src="https://loirbngz.sealoshzh.site/js/iframe.js"
@@ -19,190 +19,348 @@
     defer
   ></script>
 </head>
-<body class="tech-bg">
-    <div class="animated-bg"></div>
-    <canvas id="particles-bg"></canvas>
+<body>
+    <div class="gradient-bg"></div>
+    <nav class="floating-nav">
+        <div class="nav-brand">
+            <span class="brand-icon">🤖</span>
+            <span class="brand-text">问问API</span>
+        </div>
+        <div class="nav-links">
+            <a href="#features" class="nav-link">模型</a>
+            <a href="#benefits" class="nav-link">优势</a>
+            <a href="#pricing" class="nav-link">价格</a>
+            <a href="#contact" class="nav-link">联系</a>
+            <a href="https://key.wenwen-ai.com/register" class="nav-cta" target="_blank">开始使用</a>
+        </div>
+    </nav>
+    <div class="scroll-indicator">
+        <div class="scroll-progress"></div>
+    </div>
     <main>
-        <section class="hero fade-in-up">
+        <section class="hero">
+            <div class="hero-bg">
+                <div class="hero-shapes">
+                    <div class="shape shape-1"></div>
+                    <div class="shape shape-2"></div>
+                    <div class="shape shape-3"></div>
+                </div>
+            </div>
             <div class="hero-content">
-                <h1 class="glow-text">问问API</h1>
-                <p class="hero-subtitle">现已接入DeepSeek-R1 ！！！</p>
-                <p class="hero-description">一站式AI模型接口服务，支持国内外主流大模型，官方接口稳定可靠</p>
-                <div class="cta-buttons">
-                    <a href="https://key.wenwen-ai.com/register" class="primary-button" target="_blank" rel="noopener noreferrer">立即注册</a>
-                    <a href="https://key.wenwen-ai.com/topup" class="secondary-button" target="_blank" rel="noopener noreferrer">购买地址</a>
+                <div class="hero-badge">
+                    <span class="badge-icon">✨</span>
+                    <span class="badge-text">现已接入 GPT-5！</span>
+                </div>
+                <h1 class="hero-title">
+                    <span class="title-main">问问API</span>
+                    <span class="title-sub">下一代AI接口服务</span>
+                </h1>
+                <p class="hero-description">
+                    一站式AI模型接口服务，支持国内外主流大模型<br>
+                    官方接口，稳定可靠，开箱即用
+                </p>
+                <div class="hero-actions">
+                    <a href="https://key.wenwen-ai.com/register" class="btn btn-primary" target="_blank">
+                        <span class="btn-text">立即开始</span>
+                        <span class="btn-icon">→</span>
+                    </a>
+                    <a href="#features" class="btn btn-secondary">
+                        <span class="btn-text">了解更多</span>
+                        <span class="btn-icon">↓</span>
+                    </a>
                 </div>
                 <div class="hero-stats">
                     <div class="stat-item">
-                        <span class="stat-number">100+</span>
-                        <span class="stat-label">支持模型</span>
+                        <div class="stat-number">200+</div>
+                        <div class="stat-label">支持模型</div>
                     </div>
+                    <div class="stat-divider"></div>
                     <div class="stat-item">
-                        <span class="stat-number">10ms</span>
-                        <span class="stat-label">极速响应</span>
+                        <div class="stat-number">10ms</div>
+                        <div class="stat-label">极速响应</div>
                     </div>
+                    <div class="stat-divider"></div>
                     <div class="stat-item">
-                        <span class="stat-number">99.9%</span>
-                        <span class="stat-label">服务可用性</span>
+                        <div class="stat-number">99.9%</div>
+                        <div class="stat-label">服务可用性</div>
                     </div>
                 </div>
             </div>
         </section>
-        <section class="features fade-in-up">
-            <h2 class="section-title">支持的模型</h2>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <i class="fas fa-globe"></i>
-                    <h3>海外模型</h3>
-                    <ul>
-                        <li>GPT3.5全系</li>
-                        <li>GPT4o</li>
-                        <li>Claude</li>
-                        <li>Gemini</li>
-                    </ul>
+        <section class="features" id="features">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">支持的模型</h2>
+                    <p class="section-subtitle">覆盖全球主流AI模型，满足不同场景需求</p>
                 </div>
-                <div class="feature-card">
-                    <i class="fas fa-home"></i>
-                    <h3>国内模型</h3>
-                    <ul>
-                        <li>360智脑</li>
-                        <li>智谱ChatGLM</li>
-                        <li>讯飞星火</li>
-                        <li>文心一言</li>
-                        <li>通义千问</li>
-                        <li>Kimi</li>
-                        <li>MiniMax</li>
-                    </ul>
-                </div>
-                <div class="feature-card">
-                    <i class="fas fa-server"></i>
-                    <h3>自建资源</h3>
-                    <p class="highlight">deepseek-r1-32b</p>
-                    <div class="feature-benefits">
-                        <p><i class="fas fa-rocket"></i> 高性能推理</p>
-                        <p><i class="fas fa-shield-alt"></i> 数据安全</p>
-                        <p><i class="fas fa-cogs"></i> 灵活配置</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <section class="benefits fade-in-up">
-            <h2 class="section-title">为什么选择问问API</h2>
-            <div class="benefits-grid">
-                <div class="benefit-card">
-                    <i class="fas fa-bolt"></i>
-                    <h3>稳定可靠</h3>
-                    <p>官方接口，99.9%可用性保证</p>
-                </div>
-                <div class="benefit-card">
-                    <i class="fas fa-percentage"></i>
-                    <h3>价格优惠</h3>
-                    <p>官方计费7折，节省成本</p>
-                </div>
-                <div class="benefit-card">
-                    <i class="fas fa-plug"></i>
-                    <h3>兼容性强</h3>
-                    <p>兼容OpenAI接口，无缝对接</p>
-                </div>
-                <div class="benefit-card">
-                    <i class="fas fa-headset"></i>
-                    <h3>专业支持</h3>
-                    <p>7x24小时技术支持服务</p>
-                </div>
-            </div>
-        </section>
-        <section class="documentation fade-in-up">
-            <h2 class="section-title">使用文档</h2>
-            <div class="documentation-links">
-                <a href="https://edo504m8t9.feishu.cn/wiki/K2EUwDfX6iu3COkmGSXcJL02nhc" class="doc-link">
-                    <i class="fas fa-book"></i>
-                    <div class="doc-content">
-                        <h3>问问API使用教程</h3>
-                        <p>详细的API接入指南和示例代码</p>
-                    </div>
-                </a>
-                <a href="https://status.wenwen-ai.com/status/api" target="_blank" rel="noopener noreferrer" class="doc-link">
-                    <i class="fas fa-chart-line"></i>
-                    <div class="doc-content">
-                        <h3>问问API监控</h3>
-                        <p>实时监控API服务状态</p>
-                    </div>
-                </a>
-            </div>
-        </section>
-        <section class="pricing fade-in-up">
-            <h2 class="section-title">价格总览</h2>
-            <div class="pricing-info">
-                <div class="pricing-highlight">
-                    <i class="fas fa-tag"></i>
-                    <p>我们的接口协议兼容 OpenAI，可以无缝对接支持 OpenAI 接口的应用</p>
-                </div>
-                <a href="https://key.wenwen-ai.com/pricing" class="primary-button">查看详细价格</a>
-            </div>
-        </section>
-        <section class="contact fade-in-up">
-            <h2 class="section-title">联系我们</h2>
-            <div class="contact-content">
-                <div class="contact-methods">
-                    <div class="contact-method">
-                        <i class="fab fa-weixin"></i>
-                        <div class="contact-info">
-                            <h3>微信公众号</h3>
-                            <p>关注公众号【程序员鹤涵】，回复【key】，免费领取调用额度</p>
+                <div class="models-grid">
+                    <div class="model-category">
+                        <div class="category-header">
+                            <div class="category-icon global">
+                                <i class="fas fa-globe"></i>
+                            </div>
+                            <h3 class="category-title">海外模型</h3>
+                            <p class="category-desc">全球领先的AI模型</p>
+                        </div>
+                        <div class="model-list">
+                            <div class="model-item">GPT-5</div>
+                            <div class="model-item">GPT-4.1</div>
+                            <div class="model-item">GPT-4o</div>
+                            <div class="model-item">Claude 4.1</div>
+                            <div class="model-item">Claude 4</div>
+                            <div class="model-item">Gemini Pro</div>
                         </div>
                     </div>
-                    <div class="contact-method">
-                        <i class="fas fa-user"></i>
-                        <div class="contact-info">
-                            <h3>微信客服</h3>
-                            <p>问题反馈添加微信 hehan4096</p>
+                    <div class="model-category">
+                        <div class="category-header">
+                            <div class="category-icon domestic">
+                                <i class="fas fa-home"></i>
+                            </div>
+                            <h3 class="category-title">国内模型</h3>
+                            <p class="category-desc">本土化优势模型</p>
+                        </div>
+                        <div class="model-list">
+                            <div class="model-item">智谱ChatGLM</div>
+                            <div class="model-item">讯飞星火</div>
+                            <div class="model-item">文心一言</div>
+                            <div class="model-item">通义千问</div>
+                            <div class="model-item">Kimi Chat</div>
+                            <div class="model-item">MiniMax</div>
                         </div>
                     </div>
-                    <div class="contact-method">
-                        <i class="fas fa-envelope"></i>
-                        <div class="contact-info">
-                            <h3>邮箱</h3>
-                            <p>wanghehan@yunhefuture.com</p>
+                    <div class="model-category featured">
+                        <div class="category-header">
+                            <div class="category-icon premium">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <h3 class="category-title">专属资源</h3>
+                            <p class="category-desc">自建高性能服务</p>
+                        </div>
+                        <div class="premium-model">
+                            <div class="premium-badge">NEW</div>
+                            <div class="premium-name">DeepSeek-R1-32B</div>
+                            <div class="premium-features">
+                                <span class="feature-tag">高性能</span>
+                                <span class="feature-tag">安全</span>
+                                <span class="feature-tag">灵活</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="qr-codes">
-                    <div class="qr-code-item">
-                        <img src="https://s2.loli.net/2023/05/05/YS5ZunoEs6zmRfD.jpg" alt="公众号二维码">
-                        <p>扫码关注公众号</p>
+            </div>
+        </section>
+        <section class="benefits" id="benefits">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">为什么选择问问API</h2>
+                    <p class="section-subtitle">专业、稳定、高效的AI接口服务</p>
+                </div>
+                <div class="benefits-grid">
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3 class="benefit-title">稳定可靠</h3>
+                        <p class="benefit-desc">官方接口，99.9%服务可用性保证</p>
+                        <div class="benefit-stats">
+                            <span class="stats-label">正常运行时间</span>
+                            <span class="stats-value">99.9%</span>
+                        </div>
                     </div>
-                    <div class="qr-code-item">
-                        <img src="https://s2.loli.net/2023/05/05/XTwh7keu9GrtBW8.jpg" alt="客服二维码">
-                        <p>扫码添加客服</p>
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <i class="fas fa-tags"></i>
+                        </div>
+                        <h3 class="benefit-title">价格优惠</h3>
+                        <p class="benefit-desc">官方计费7折，大幅节省成本</p>
+                        <div class="benefit-stats">
+                            <span class="stats-label">节省成本</span>
+                            <span class="stats-value">30%+</span>
+                        </div>
+                    </div>
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <i class="fas fa-plug"></i>
+                        </div>
+                        <h3 class="benefit-title">兼容性强</h3>
+                        <p class="benefit-desc">完全兼容OpenAI接口规范</p>
+                        <div class="benefit-stats">
+                            <span class="stats-label">迁移时间</span>
+                            <span class="stats-value">< 5分钟</span>
+                        </div>
+                    </div>
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <h3 class="benefit-title">专业支持</h3>
+                        <p class="benefit-desc">7x24小时技术支持服务</p>
+                        <div class="benefit-stats">
+                            <span class="stats-label">响应时间</span>
+                            <span class="stats-value">< 1小时</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="documentation">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">开发文档</h2>
+                    <p class="section-subtitle">快速上手，轻松集成</p>
+                </div>
+                <div class="doc-grid">
+                    <a href="https://edo504m8t9.feishu.cn/wiki/K2EUwDfX6iu3COkmGSXcJL02nhc" class="doc-card" target="_blank">
+                        <div class="doc-icon">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <div class="doc-content">
+                            <h3 class="doc-title">使用教程</h3>
+                            <p class="doc-desc">详细的接入指南和示例代码</p>
+                        </div>
+                        <div class="doc-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </a>
+                    <a href="https://status.wenwen-ai.com/status/api" class="doc-card" target="_blank">
+                        <div class="doc-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="doc-content">
+                            <h3 class="doc-title">服务监控</h3>
+                            <p class="doc-desc">实时查看API服务状态</p>
+                        </div>
+                        <div class="doc-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+        <section class="pricing" id="pricing">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">价格方案</h2>
+                    <p class="section-subtitle">透明定价，按需付费</p>
+                </div>
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <div class="pricing-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <h3 class="pricing-title">按量计费</h3>
+                        <p class="pricing-desc">兼容OpenAI协议，无缝对接现有应用</p>
+                    </div>
+                    <div class="pricing-features">
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>100+ AI模型支持</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>官方价格7折优惠</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>无最低消费限制</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>7x24小时技术支持</span>
+                        </div>
+                    </div>
+                    <div class="pricing-action">
+                        <a href="https://key.wenwen-ai.com/pricing" class="btn btn-primary" target="_blank">
+                            <span class="btn-text">查看详细价格</span>
+                            <span class="btn-icon">→</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="contact" id="contact">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">联系我们</h2>
+                    <p class="section-subtitle">专业团队为您提供贴心服务</p>
+                </div>
+                <div class="contact-grid">
+                    <div class="contact-methods">
+                        <div class="contact-card">
+                            <div class="contact-icon wechat">
+                                <i class="fab fa-weixin"></i>
+                            </div>
+                            <h3 class="contact-title">微信公众号</h3>
+                            <p class="contact-desc">关注【程序员鹤涵】，回复【key】免费领取额度</p>
+                        </div>
+                        <div class="contact-card">
+                            <div class="contact-icon support">
+                                <i class="fas fa-headset"></i>
+                            </div>
+                            <h3 class="contact-title">微信客服</h3>
+                            <p class="contact-desc">问题反馈添加微信：hehan4096</p>
+                        </div>
+                        <div class="contact-card">
+                            <div class="contact-icon email">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <h3 class="contact-title">邮箱联系</h3>
+                            <p class="contact-desc">wanghehan@yunhefuture.com</p>
+                        </div>
+                    </div>
+                    <div class="qr-section">
+                        <div class="qr-cards">
+                            <div class="qr-card">
+                                <img src="https://s2.loli.net/2023/05/05/YS5ZunoEs6zmRfD.jpg" alt="公众号二维码" class="qr-image">
+                                <p class="qr-label">关注公众号</p>
+                            </div>
+                            <div class="qr-card">
+                                <img src="https://s2.loli.net/2023/05/05/XTwh7keu9GrtBW8.jpg" alt="客服二维码" class="qr-image">
+                                <p class="qr-label">添加客服</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
     </main>
-    <footer class="fade-in-up">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>问问API</h4>
-                <p>多模型AI接口服务</p>
-                <div class="social-links">
-                    <a href="#"><i class="fab fa-github"></i></a>
-                    <a href="#"><i class="fab fa-weixin"></i></a>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="brand-logo">
+                        <span class="brand-icon">🤖</span>
+                        <span class="brand-name">问问API</span>
+                    </div>
+                    <p class="brand-desc">下一代AI接口服务平台</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-weixin"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <div class="link-group">
+                        <h4 class="link-title">服务</h4>
+                        <a href="https://key.wenwen-ai.com/register" target="_blank" class="footer-link">立即注册</a>
+                        <a href="https://key.wenwen-ai.com/topup" target="_blank" class="footer-link">充值购买</a>
+                        <a href="https://key.wenwen-ai.com/pricing" target="_blank" class="footer-link">价格方案</a>
+                    </div>
+                    <div class="link-group">
+                        <h4 class="link-title">文档</h4>
+                        <a href="https://yunhefuture.feishu.cn/wiki/Q8wGwgKLZiyFgSk3amicX2innZd" target="_blank" class="footer-link">使用教程</a>
+                        <a href="https://status.wenwen-ai.com/status/api" target="_blank" class="footer-link">服务状态</a>
+                    </div>
                 </div>
             </div>
-            <div class="footer-section">
-                <h4>快速链接</h4>
-                <a href="https://key.wenwen-ai.com/register" target="_blank" rel="noopener noreferrer">注册</a>
-                <a href="https://faka.wenwen-ai.com/" target="_blank" rel="noopener noreferrer">购买</a>
-                <a href="https://key.wenwen-ai.com/pricing" target="_blank" rel="noopener noreferrer">价格</a>
-            </div>
-            <div class="footer-section">
-                <h4>文档</h4>
-                <a href="https://edo504m8t9.feishu.cn/wiki/K2EUwDfX6iu3COkmGSXcJL02nhc">使用教程</a>
-                <a href="https://status.wenwen-ai.com/status/api">状态监控</a>
+            <div class="footer-bottom">
+                <p class="copyright">© 2024 问问API. All rights reserved.</p>
             </div>
         </div>
     </footer>
     <script src="scripts.js"></script>
-    <script src="particles.js"></script>
 </body>
 </html> 
