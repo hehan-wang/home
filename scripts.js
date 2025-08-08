@@ -36,109 +36,175 @@ document.addEventListener('DOMContentLoaded', function() {
         const isEmbedded = window !== window.top;
         const nav = document.querySelector('.floating-nav');
         
-        // Function to detect parent site navigation height
-        function detectParentNavHeight() {
-            if (!isEmbedded) return 0;
+        // Function to detect parent site navigation height and structure
+        function detectParentNavigation() {
+            if (!isEmbedded) return { height: 0, hasNav: false };
             
             try {
-                // Try to detect common parent navigation patterns
                 const iframe = window.frameElement;
                 if (iframe) {
                     const iframeRect = iframe.getBoundingClientRect();
-                    // If iframe starts below certain point, assume parent has navigation
-                    if (iframeRect.top > 60) {
-                        return Math.min(iframeRect.top, 100); // Cap at 100px
+                    const parentWindow = window.parent;
+                    
+                    // Check if iframe is positioned below typical navigation height
+                    if (iframeRect.top > 80) {
+                        return { height: iframeRect.top, hasNav: true };
+                    }
+                    
+                    // Try to detect parent navigation elements
+                    try {
+                        const parentNav = parentWindow.document.querySelector('nav, .nav, .navbar, .header, .menu, [class*="nav"], [class*="menu"], [class*="header"]');
+                        if (parentNav) {
+                            const navRect = parentNav.getBoundingClientRect();
+                            return { height: navRect.height, hasNav: true };
+                        }
+                    } catch (e) {
+                        // Cross-origin restriction
                     }
                 }
             } catch (e) {
-                // Cross-origin restriction, use fallback
+                // Cross-origin restriction
             }
             
             // Fallback: assume parent has navigation if embedded
-            return isEmbedded ? 60 : 0;
+            return { height: isEmbedded ? 80 : 0, hasNav: isEmbedded };
         }
         
-        // Function to check if navigation is likely being covered
+        // Function to check if navigation is being covered by parent elements
         function checkNavigationVisibility() {
             if (!isEmbedded) return true;
             
             const navRect = nav.getBoundingClientRect();
-            const parentNavHeight = detectParentNavHeight();
+            const parentInfo = detectParentNavigation();
             
             // If navigation is positioned too close to top and parent has nav, likely covered
-            return navRect.top > parentNavHeight + 10;
+            return navRect.top > parentInfo.height + 20;
+        }
+        
+        // Function to determine optimal navigation position
+        function calculateOptimalPosition() {
+            const parentInfo = detectParentNavigation();
+            const currentIsMobile = window.innerWidth <= 768;
+            const scrolled = window.pageYOffset;
+            const viewportHeight = window.innerHeight;
+            
+            let position = {
+                type: 'fixed',
+                top: 16,
+                zIndex: 9999,
+                background: 'rgba(255, 255, 255, 0.95)',
+                backdropFilter: 'blur(20px)',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+                border: '1px solid rgba(255, 255, 255, 0.2)'
+            };
+            
+            if (isEmbedded) {
+                // Enhanced embedded positioning logic
+                const isLikelyCovered = !checkNavigationVisibility();
+                const parentNavHeight = parentInfo.height;
+                
+                if (isLikelyCovered || parentNavHeight > 60) {
+                    // Switch to relative positioning below content
+                    position = {
+                        type: 'relative',
+                        top: 0,
+                        zIndex: 999999,
+                        background: 'rgba(255, 255, 255, 0.98)',
+                        backdropFilter: 'blur(20px) saturate(1.2)',
+                        boxShadow: '0 16px 48px rgba(0, 0, 0, 0.3), 0 0 0 2px rgba(255, 255, 255, 0.8)',
+                        border: '3px solid rgba(102, 126, 234, 0.4)',
+                        margin: '20px auto 30px auto',
+                        transform: 'none',
+                        left: 'auto'
+                    };
+                } else {
+                    // Use enhanced fixed positioning with parent nav consideration
+                    let topPosition;
+                    if (scrolled > 50) {
+                        topPosition = currentIsMobile ? 
+                            Math.max(8, parentNavHeight * 0.2) : 
+                            Math.max(16, parentNavHeight * 0.3);
+                    } else {
+                        topPosition = currentIsMobile ? 
+                            Math.max(12, parentNavHeight * 0.4) : 
+                            Math.max(24, parentNavHeight * 0.5);
+                    }
+                    
+                    position = {
+                        type: 'fixed',
+                        top: topPosition,
+                        zIndex: 999999,
+                        background: 'rgba(255, 255, 255, 0.98)',
+                        backdropFilter: 'blur(20px) saturate(1.2)',
+                        boxShadow: '0 12px 40px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.5)',
+                        border: '2px solid rgba(102, 126, 234, 0.2)',
+                        transform: 'translateX(-50%)',
+                        left: '50%'
+                    };
+                }
+            } else {
+                // Standard positioning for non-embedded
+                const topPosition = scrolled > 50 ? 
+                    (currentIsMobile ? '8px' : '16px') : 
+                    (currentIsMobile ? '12px' : '24px');
+                    
+                position = {
+                    type: 'fixed',
+                    top: topPosition,
+                    zIndex: 9999,
+                    background: scrolled > 50 ? 
+                        'rgba(255, 255, 255, 0.98)' : 
+                        'rgba(255, 255, 255, 0.95)',
+                    backdropFilter: 'blur(20px)',
+                    boxShadow: scrolled > 50 ? 
+                        '0 12px 40px rgba(0, 0, 0, 0.2)' : 
+                        '0 8px 32px rgba(0, 0, 0, 0.1)',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    transform: 'translateX(-50%)',
+                    left: '50%'
+                };
+            }
+            
+            return position;
         }
         
         function updateNavigationPosition() {
-            const parentNavHeight = detectParentNavHeight();
-            const currentIsMobile = window.innerWidth <= 768;
-            const scrolled = window.pageYOffset;
+            const position = calculateOptimalPosition();
             
-            let topPosition;
+            // Apply position and styling
+            nav.style.position = position.type;
+            nav.style.top = position.top + (typeof position.top === 'number' ? 'px' : '');
+            nav.style.zIndex = position.zIndex;
+            nav.style.background = position.background;
+            nav.style.backdropFilter = position.backdropFilter;
+            nav.style.boxShadow = position.boxShadow;
+            nav.style.border = position.border;
+            
+            if (position.transform) {
+                nav.style.transform = position.transform;
+            }
+            if (position.left) {
+                nav.style.left = position.left;
+            }
+            if (position.margin) {
+                nav.style.margin = position.margin;
+            }
+            
+            // Add/remove embedded classes
             if (isEmbedded) {
-                // Check if navigation might be covered
-                const isLikelyCovered = !checkNavigationVisibility();
-                
-                if (isLikelyCovered || parentNavHeight > 50) {
-                    // Switch to relative positioning below content
-                    nav.classList.add('deep-embed');
-                    nav.style.position = 'relative';
-                    nav.style.top = '0';
-                    nav.style.margin = '20px auto 30px auto';
-                    nav.style.transform = 'none';
-                    nav.style.left = 'auto';
-                } else {
-                    // Use enhanced fixed positioning
-                    nav.classList.remove('deep-embed');
-                    
-                    if (scrolled > 50) {
-                        topPosition = currentIsMobile ? 
-                            Math.max(4, parentNavHeight * 0.3) : 
-                            Math.max(12, parentNavHeight * 0.4);
-                    } else {
-                        topPosition = currentIsMobile ? 
-                            Math.max(8, parentNavHeight * 0.6) : 
-                            Math.max(30, parentNavHeight * 0.8);
-                    }
-                    
-                    nav.style.position = 'fixed';
-                    nav.style.top = topPosition + 'px';
-                    nav.style.transform = 'translateX(-50%)';
-                    nav.style.left = '50%';
-                    nav.style.margin = '0';
-                }
-                
-                // Enhanced styling for embedded context
-                nav.style.zIndex = '999999'; // Even higher z-index
-                nav.style.background = 'rgba(255, 255, 255, 0.98)';
-                nav.style.backdropFilter = 'blur(20px) saturate(1.2)';
-                nav.style.boxShadow = '0 12px 40px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.5)';
-                nav.style.border = '2px solid rgba(102, 126, 234, 0.2)';
                 nav.classList.add('embedded');
+                if (position.type === 'relative') {
+                    nav.classList.add('deep-embed');
+                } else {
+                    nav.classList.remove('deep-embed');
+                }
             } else {
-                // Standard positioning for non-embedded
                 nav.classList.remove('embedded', 'deep-embed');
-                nav.style.position = 'fixed';
-                nav.style.transform = 'translateX(-50%)';
-                nav.style.left = '50%';
-                nav.style.margin = '0';
-                
-                topPosition = scrolled > 50 ? 
-                    (currentIsMobile ? '4px' : '8px') : 
-                    (currentIsMobile ? '8px' : '16px');
-                    
-                nav.style.background = scrolled > 50 ? 
-                    'rgba(255, 255, 255, 0.98)' : 
-                    'rgba(255, 255, 255, 0.95)';
-                nav.style.boxShadow = scrolled > 50 ? 
-                    '0 12px 40px rgba(0, 0, 0, 0.2)' : 
-                    '0 8px 32px rgba(0, 0, 0, 0.1)';
-                nav.style.top = topPosition;
             }
         }
         
-        // Initial positioning
-        setTimeout(updateNavigationPosition, 100); // Small delay to ensure DOM is ready
+        // Initial positioning with delay to ensure DOM is ready
+        setTimeout(updateNavigationPosition, 100);
         
         // Handle window resize
         window.addEventListener('resize', updateNavigationPosition);
@@ -148,7 +214,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Periodic check for embedded context changes
         if (isEmbedded) {
-            setInterval(updateNavigationPosition, 3000);
+            setInterval(updateNavigationPosition, 2000);
         }
         
         // Add intersection observer to detect if nav is being covered
@@ -156,19 +222,33 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
                 const observer = new IntersectionObserver((entries) => {
                     entries.forEach(entry => {
-                        if (entry.intersectionRatio < 0.7) {
+                        if (entry.intersectionRatio < 0.8) {
                             // Navigation is being covered, switch to relative mode
                             nav.classList.add('deep-embed');
                             updateNavigationPosition();
                         }
                     });
                 }, {
-                    threshold: [0.3, 0.7, 1.0],
-                    rootMargin: '0px 0px -10px 0px'
+                    threshold: [0.5, 0.8, 1.0],
+                    rootMargin: '0px 0px -20px 0px'
                 });
                 
                 observer.observe(nav);
             }, 1000);
+        }
+        
+        // Add message listener for parent communication
+        if (isEmbedded) {
+            window.addEventListener('message', function(event) {
+                if (event.data && event.data.type === 'PARENT_NAV_HEIGHT') {
+                    // Parent page can send navigation height information
+                    const parentNavHeight = event.data.height || 0;
+                    if (parentNavHeight > 0) {
+                        // Update navigation position based on parent nav height
+                        setTimeout(updateNavigationPosition, 100);
+                    }
+                }
+            });
         }
     }
 

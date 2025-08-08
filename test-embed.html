@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>导航栏嵌入测试</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+        }
+        
+        /* 模拟父页面的导航栏 */
+        .parent-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .parent-nav h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        
+        .parent-nav .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .parent-nav .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: background 0.3s;
+        }
+        
+        .parent-nav .nav-links a:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        /* 内容区域 */
+        .content {
+            margin-top: 80px;
+            padding: 24px;
+        }
+        
+        .content h2 {
+            color: #333;
+            margin-bottom: 16px;
+        }
+        
+        .content p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+        
+        /* iframe 容器 */
+        .iframe-container {
+            margin: 20px 0;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            background: white;
+        }
+        
+        .iframe-container iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+        }
+        
+        .iframe-label {
+            background: #f8f9fa;
+            padding: 12px 16px;
+            border-bottom: 1px solid #ddd;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        /* 测试控制按钮 */
+        .test-controls {
+            margin: 20px 0;
+            padding: 16px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .test-controls button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            margin-right: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .test-controls button:hover {
+            background: #5a6fd8;
+        }
+        
+        .test-controls button.active {
+            background: #4c63d2;
+        }
+    </style>
+</head>
+<body>
+    <!-- 模拟父页面的导航栏 -->
+    <nav class="parent-nav">
+        <h1>父页面导航栏</h1>
+        <div class="nav-links">
+            <a href="#home">首页</a>
+            <a href="#about">关于</a>
+            <a href="#contact">联系</a>
+            <a href="#login">登录</a>
+        </div>
+    </nav>
+    
+    <div class="content">
+        <h2>导航栏嵌入测试页面</h2>
+        <p>这个页面模拟了一个有固定导航栏的父页面，用来测试问问API页面的导航栏在嵌入时是否能正确避免重合。</p>
+        
+        <div class="test-controls">
+            <h3>测试控制</h3>
+            <button onclick="toggleNav()">切换导航栏显示</button>
+            <button onclick="changeNavHeight()">改变导航栏高度</button>
+            <button onclick="toggleIframe()">切换iframe显示</button>
+            <span id="status">当前状态: 导航栏显示中</span>
+        </div>
+        
+        <div class="iframe-container" id="iframeContainer">
+            <div class="iframe-label">问问API页面 (嵌入测试)</div>
+            <iframe src="index.html" id="testIframe"></iframe>
+        </div>
+        
+        <div style="height: 1000px; background: linear-gradient(135deg, #f8f9fa, #e9ecef); padding: 40px; text-align: center;">
+            <h3>页面底部内容</h3>
+            <p>这是页面的底部内容，用来测试滚动时的导航栏行为。</p>
+            <p>请尝试滚动页面，观察嵌入的问问API导航栏是否正确显示。</p>
+        </div>
+    </div>
+    
+    <script>
+        let navVisible = true;
+        let iframeVisible = true;
+        
+        function toggleNav() {
+            const nav = document.querySelector('.parent-nav');
+            navVisible = !navVisible;
+            
+            if (navVisible) {
+                nav.style.display = 'flex';
+                document.querySelector('.content').style.marginTop = '80px';
+                document.getElementById('status').textContent = '当前状态: 导航栏显示中';
+            } else {
+                nav.style.display = 'none';
+                document.querySelector('.content').style.marginTop = '0';
+                document.getElementById('status').textContent = '当前状态: 导航栏隐藏中';
+            }
+            
+            // 通知iframe导航栏状态变化
+            notifyIframe();
+        }
+        
+        function changeNavHeight() {
+            const nav = document.querySelector('.parent-nav');
+            const currentHeight = nav.style.height || '80px';
+            const newHeight = currentHeight === '80px' ? '120px' : '80px';
+            
+            nav.style.height = newHeight;
+            document.querySelector('.content').style.marginTop = newHeight;
+            
+            // 通知iframe导航栏高度变化
+            notifyIframe();
+        }
+        
+        function toggleIframe() {
+            const container = document.getElementById('iframeContainer');
+            iframeVisible = !iframeVisible;
+            
+            if (iframeVisible) {
+                container.style.display = 'block';
+            } else {
+                container.style.display = 'none';
+            }
+        }
+        
+        function notifyIframe() {
+            const iframe = document.getElementById('testIframe');
+            if (iframe && iframe.contentWindow) {
+                try {
+                    const navHeight = navVisible ? 
+                        (document.querySelector('.parent-nav').offsetHeight) : 0;
+                    
+                    iframe.contentWindow.postMessage({
+                        type: 'PARENT_NAV_HEIGHT',
+                        height: navHeight
+                    }, '*');
+                } catch (e) {
+                    console.log('无法发送消息到iframe:', e);
+                }
+            }
+        }
+        
+        // 页面加载完成后通知iframe
+        window.addEventListener('load', () => {
+            setTimeout(notifyIframe, 1000);
+        });
+        
+        // 监听iframe加载完成
+        document.getElementById('testIframe').addEventListener('load', () => {
+            setTimeout(notifyIframe, 500);
+        });
+    </script>
+</body>
+</html>
