@@ -1,0 +1,102 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup SSH
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        SSH_PORT="${{ secrets.SERVER_SSH_PORT || '22' }}"
+        ssh-keyscan -p $SSH_PORT -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
+
+    - name: Create backup on server
+      run: |
+        SSH_PORT="${{ secrets.SERVER_SSH_PORT || '22' }}"
+        ssh -p $SSH_PORT -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} '
+          BACKUP_DIR="/var/backups/keyhome/$(date +%Y%m%d_%H%M%S)"
+          echo "Creating backup at $BACKUP_DIR"
+          sudo mkdir -p $BACKUP_DIR
+          if [ -d "/var/www/keyhome" ]; then
+            sudo cp -r /var/www/keyhome/* $BACKUP_DIR/ 2>/dev/null || echo "No files to backup"
+            echo "Backup created successfully"
+            
+            # Keep only last 10 backups
+            sudo find /var/backups/keyhome -maxdepth 1 -type d -name "20*" | sort -r | tail -n +11 | xargs -r sudo rm -rf
+            echo "Old backups cleaned up"
+          else
+            echo "Target directory does not exist, no backup needed"
+          fi
+        '
+
+    - name: Deploy to server
+      run: |
+        SSH_PORT="${{ secrets.SERVER_SSH_PORT || '22' }}"
+        # Create deployment directory if it doesn't exist
+        ssh -p $SSH_PORT -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} '
+          sudo mkdir -p /var/www/keyhome
+          sudo chown $USER:$USER /var/www/keyhome
+        '
+        
+        # Copy files to server
+        rsync -avz --delete -e "ssh -p $SSH_PORT" \
+          --exclude='.git/' \
+          --exclude='.github/' \
+          --exclude='README.md' \
+          --exclude='EMBEDDED_NAV_CONFIG.md' \
+          --exclude='NAVIGATION_FIX_README.md' \
+          --exclude='test-embed.html' \
+          --exclude='netlify.toml' \
+          ./ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/var/www/keyhome/
+
+    - name: Update nginx configuration
+      run: |
+        SSH_PORT="${{ secrets.SERVER_SSH_PORT || '22' }}"
+        ssh -p $SSH_PORT -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} '
+          # Backup current nginx config
+          sudo cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.backup.$(date +%Y%m%d_%H%M%S)
+          
+          # Update nginx config to point to new directory
+          sudo sed -i "s|root /root/home;|root /var/www/keyhome;|g" /etc/nginx/sites-available/default
+          
+          # Test nginx configuration
+          sudo nginx -t
+          
+          # Reload nginx if test passes
+          if [ $? -eq 0 ]; then
+            sudo systemctl reload nginx
+            echo "Nginx reloaded successfully"
+          else
+            echo "Nginx configuration test failed"
+            exit 1
+          fi
+        '
+
+    - name: Verify deployment
+      run: |
+        SSH_PORT="${{ secrets.SERVER_SSH_PORT || '22' }}"
+        ssh -p $SSH_PORT -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} '
+          if [ -f "/var/www/keyhome/index.html" ]; then
+            echo "✅ Deployment successful - index.html found"
+            ls -la /var/www/keyhome/
+          else
+            echo "❌ Deployment failed - index.html not found"
+            exit 1
+          fi
+        '
+
+    - name: Cleanup SSH
+      if: always()
+      run: |
+        rm -f ~/.ssh/id_rsa

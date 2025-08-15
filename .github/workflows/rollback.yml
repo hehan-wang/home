@@ -1,0 +1,87 @@
+name: Rollback Deployment
+
+on:
+  workflow_dispatch:
+    inputs:
+      backup_timestamp:
+        description: 'Backup timestamp (YYYYMMDD_HHMMSS) to rollback to. Leave empty to use latest backup.'
+        required: false
+        type: string
+
+jobs:
+  rollback:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Setup SSH
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        SSH_PORT="${{ secrets.SERVER_SSH_PORT || '22' }}"
+        ssh-keyscan -p $SSH_PORT -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
+
+    - name: List available backups
+      run: |
+        SSH_PORT="${{ secrets.SERVER_SSH_PORT || '22' }}"
+        ssh -p $SSH_PORT -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} '
+          echo "Available backups:"
+          sudo find /var/backups/keyhome -maxdepth 1 -type d -name "20*" | sort -r | head -10
+        '
+
+    - name: Determine backup to use
+      id: backup
+      run: |
+        SSH_PORT="${{ secrets.SERVER_SSH_PORT || '22' }}"
+        BACKUP_TIMESTAMP="${{ github.event.inputs.backup_timestamp }}"
+        if [ -z "$BACKUP_TIMESTAMP" ]; then
+          # Get latest backup
+          BACKUP_TIMESTAMP=$(ssh -p $SSH_PORT -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} '
+            sudo find /var/backups/keyhome -maxdepth 1 -type d -name "20*" | sort -r | head -1 | xargs basename
+          ')
+        fi
+        echo "backup_timestamp=$BACKUP_TIMESTAMP" >> $GITHUB_OUTPUT
+        echo "Using backup: $BACKUP_TIMESTAMP"
+
+    - name: Rollback deployment
+      run: |
+        SSH_PORT="${{ secrets.SERVER_SSH_PORT || '22' }}"
+        BACKUP_TIMESTAMP="${{ steps.backup.outputs.backup_timestamp }}"
+        ssh -p $SSH_PORT -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "
+          BACKUP_PATH=\"/var/backups/keyhome/$BACKUP_TIMESTAMP\"
+          
+          if [ ! -d \"\$BACKUP_PATH\" ]; then
+            echo \"❌ Backup $BACKUP_TIMESTAMP not found\"
+            exit 1
+          fi
+          
+          echo \"📦 Creating current state backup before rollback\"
+          CURRENT_BACKUP=\"/var/backups/keyhome/before_rollback_\$(date +%Y%m%d_%H%M%S)\"
+          sudo mkdir -p \$CURRENT_BACKUP
+          sudo cp -r /var/www/keyhome/* \$CURRENT_BACKUP/ 2>/dev/null || true
+          
+          echo \"🔄 Rolling back to backup: $BACKUP_TIMESTAMP\"
+          sudo rm -rf /var/www/keyhome/*
+          sudo cp -r \$BACKUP_PATH/* /var/www/keyhome/
+          sudo chown -R www-data:www-data /var/www/keyhome
+          
+          echo \"✅ Rollback completed successfully\"
+          ls -la /var/www/keyhome/
+        "
+
+    - name: Verify rollback
+      run: |
+        SSH_PORT="${{ secrets.SERVER_SSH_PORT || '22' }}"
+        ssh -p $SSH_PORT -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} '
+          if [ -f "/var/www/keyhome/index.html" ]; then
+            echo "✅ Rollback verification successful - index.html found"
+          else
+            echo "❌ Rollback verification failed - index.html not found"
+            exit 1
+          fi
+        '
+
+    - name: Cleanup SSH
+      if: always()
+      run: |
+        rm -f ~/.ssh/id_rsa
