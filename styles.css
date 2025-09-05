@@ -1198,11 +1198,16 @@ section {
 }
 
 .agency-hero {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 80px;
+  display: flex;
+  justify-content: center;
   align-items: center;
   margin-bottom: 100px;
+}
+
+.agency-content-centered {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .agency-content {
@@ -1288,13 +1293,141 @@ section {
   position: relative;
 }
 
-.revenue-chart {
+.agency-stats-card {
   background: rgba(255, 255, 255, 0.9);
   border-radius: 20px;
   padding: 32px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
   border: 1px solid rgba(0, 0, 0, 0.05);
   min-width: 320px;
+}
+
+.stats-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.stats-header h4 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.stats-period {
+  font-size: 12px;
+  color: #667eea;
+  background: rgba(102, 126, 234, 0.1);
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+.stats-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.stats-list .stat-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.stats-list .stat-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 16px;
+}
+
+.stats-list .stat-content {
+  flex: 1;
+}
+
+.stats-list .stat-number {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a1a1a;
+  line-height: 1;
+}
+
+.stats-list .stat-label {
+  font-size: 14px;
+  color: #666;
+  margin-top: 4px;
+}
+
+.partnership-benefits {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  min-width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.benefit-highlight {
+  text-align: center;
+  padding: 24px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.benefit-highlight::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.benefit-highlight .benefit-icon {
+  position: relative;
+  z-index: 1;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  font-size: 20px;
+}
+
+.benefit-highlight h4 {
+  position: relative;
+  z-index: 1;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.benefit-highlight p {
+  position: relative;
+  z-index: 1;
+  font-size: 14px;
+  opacity: 0.9;
+  line-height: 1.4;
 }
 
 .chart-header {
