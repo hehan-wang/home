@@ -608,10 +608,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (entry.isIntersecting) {
                     const target = entry.target;
                     const text = target.textContent;
-                    const number = parseInt(text.replace(/\D/g, ''));
-                    const suffix = text.replace(/\d/g, '');
-                    
-                    if (number) {
+                    const match = text.match(/(\d+\.?\d*)(.*)/);
+
+                    if (match) {
+                        const number = parseFloat(match[1]);
+                        const suffix = match[2];
                         animateNumber(target, 0, number, suffix, 1500);
                         observer.unobserve(target);
                     }
@@ -624,19 +625,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function animateNumber(element, start, end, suffix, duration) {
         const startTime = performance.now();
-        
+        const isDecimal = end % 1 !== 0;
+
         function update(currentTime) {
             const elapsed = currentTime - startTime;
             const progress = Math.min(elapsed / duration, 1);
-            const current = Math.floor(start + (end - start) * easeOutCubic(progress));
-            
-            element.textContent = current + suffix;
-            
+            const current = start + (end - start) * easeOutCubic(progress);
+
+            // Format number appropriately
+            const displayNumber = isDecimal ?
+                current.toFixed(1) :
+                Math.floor(current);
+
+            element.textContent = displayNumber + suffix;
+
             if (progress < 1) {
                 requestAnimationFrame(update);
             }
         }
-        
+
         requestAnimationFrame(update);
     }
 
